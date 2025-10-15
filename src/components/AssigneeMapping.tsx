@@ -170,19 +170,19 @@ export default function AssigneeMapping() {
       const finalAssignments = {
         run_id: selectedRun.id,
         saved_at: new Date().toISOString(),
-        epics: requirements.epics?.map(epic => ({
+        epics: requirements.epics?.map((epic: any) => ({
           id: epic.id,
           title: epic.title,
           description: epic.description || '',
           assignee: assignments[epic.id] || '',
           assignee_name: users.find(u => u.account_id === assignments[epic.id])?.display_name || '',
-          stories: epic.stories?.map(story => ({
+          stories: epic.stories?.map((story: any) => ({
             id: story.id,
             title: story.title,
             description: story.description || '',
             assignee: assignments[story.id] || '',
             assignee_name: users.find(u => u.account_id === assignments[story.id])?.display_name || '',
-            subtasks: story.subtasks?.map(subtask => ({
+            subtasks: story.subtasks?.map((subtask: any) => ({
               id: subtask.id,
               title: subtask.title,
               description: subtask.description || '',
@@ -251,7 +251,7 @@ export default function AssigneeMapping() {
               <h3 className="text-sm font-medium text-red-800">Error</h3>
               <p className="text-sm text-red-700 mt-1">{error}</p>
               <button
-                onClick={fetchData}
+                onClick={() => fetchData(true)}
                 className="mt-2 text-sm text-red-600 hover:text-red-500 underline"
               >
                 Try again

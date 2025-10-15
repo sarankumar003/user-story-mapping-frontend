@@ -3,6 +3,7 @@ import type { Decomposition } from '@/types/requirements'
 
 // Typed API responses
 export type JiraUsersResponse = { users: any[] }
+export type SuggestionsResponse = { suggestions: Record<string, any> }
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 //export const API_BASE_URL = 'http://localhost:8000'
@@ -140,15 +141,21 @@ export const refreshJiraUsers = async (): Promise<JiraUsersResponse> => {
 }
 
 // Assignment suggestions API
-export const generateAssigneeSuggestions = async (runId: string, users: any[], tasks: any[]) => {
-  return longRunningApi.post(`/api/v1/assignments/suggest/${runId}`, {
+export const generateAssigneeSuggestions = async (
+  runId: string,
+  users: any[],
+  tasks: any[]
+): Promise<SuggestionsResponse> => {
+  const data = await longRunningApi.post(`/api/v1/assignments/suggest/${runId}`, {
     users,
     tasks
   })
+  return data as unknown as SuggestionsResponse
 }
 
-export const getAssigneeSuggestions = async (runId: string) => {
-  return api.get(`/api/v1/assignments/suggestions/${runId}`)
+export const getAssigneeSuggestions = async (runId: string): Promise<SuggestionsResponse> => {
+  const data = await api.get(`/api/v1/assignments/suggestions/${runId}`)
+  return data as unknown as SuggestionsResponse
 }
 
 export const getFinalAssignments = async (runId: string) => {
