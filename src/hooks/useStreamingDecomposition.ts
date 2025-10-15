@@ -40,7 +40,8 @@ export const useStreamingDecomposition = () => {
   const refreshRuns = useCallback(async () => {
     try {
       const response = await getRuns()
-      setRuns(response.data)
+      const runsData = Array.isArray(response) ? response : (response && (response as any).runs ? (response as any).runs : [])
+      setRuns(runsData)
     } catch (error) {
       console.error('Failed to refresh runs:', error)
     }

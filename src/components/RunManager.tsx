@@ -27,7 +27,8 @@ export default function RunManager() {
     setIsLoading(true)
     try {
       const response = await getRuns()
-      const runsData = Array.isArray(response) ? response : (response?.runs || [])
+      // Prefer payload: if API helper returns plain array, use it; if backend returns {runs}, use that.
+      const runsData = Array.isArray(response) ? response : (response && (response as any).runs ? (response as any).runs : [])
       setRuns(runsData)
     } catch (error) {
       console.error('Error loading runs:', error)

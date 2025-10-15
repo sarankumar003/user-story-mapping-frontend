@@ -35,8 +35,7 @@ export default function AppHomePage() {
       setTimelineLoading(true)
       setTimelineError(null)
       try {
-        const res = await getDecompositionRaw(selectedRun.id)
-        const data = res.data
+        const data = await getDecompositionRaw(selectedRun.id)
         setTimelineData(data)
         
         // Update run's gantt step status to completed when timeline data is successfully loaded

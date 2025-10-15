@@ -1,6 +1,9 @@
 import axios from 'axios'
 import type { Decomposition } from '@/types/requirements'
 
+// Typed API responses
+export type JiraUsersResponse = { users: any[] }
+
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 //export const API_BASE_URL = 'http://localhost:8000'
 
@@ -103,9 +106,10 @@ export const getDecomposition = async (runId: string) => {
   return api.get(`/api/v1/requirements/decomposition/${runId}`)
 }
 
-export const getDecompositionRaw = async (runId: string) => {
-  // GET /api/v1/requirements/decomposition_raw/{run_id}
-  return api.get<Decomposition>(`/api/v1/requirements/decomposition_raw/${runId}`)
+export const getDecompositionRaw = async (runId: string): Promise<Decomposition> => {
+  // Interceptor returns response.data but Axios types think AxiosResponse.
+  const data = await api.get(`/api/v1/requirements/decomposition_raw/${runId}`)
+  return data as unknown as Decomposition
 }
 
 // Gantt API
@@ -125,12 +129,14 @@ export const getGanttChart = async (runId: string) => {
 }
 
 // Jira Users Cache API
-export const getJiraUsersCached = async () => {
-  return api.get('/api/v1/jira/users')
+export const getJiraUsersCached = async (): Promise<JiraUsersResponse> => {
+  const data = await api.get('/api/v1/jira/users')
+  return data as unknown as JiraUsersResponse
 }
 
-export const refreshJiraUsers = async () => {
-  return api.get('/api/v1/jira/users/refresh')
+export const refreshJiraUsers = async (): Promise<JiraUsersResponse> => {
+  const data = await api.get('/api/v1/jira/users/refresh')
+  return data as unknown as JiraUsersResponse
 }
 
 // Assignment suggestions API

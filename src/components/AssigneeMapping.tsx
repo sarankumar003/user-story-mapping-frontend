@@ -60,7 +60,7 @@ export default function AssigneeMapping() {
       setRequirements(requirementsData)
       // Load cached users once
       const usersRes = await getJiraUsersCached()
-      setUsers(usersRes.users || usersRes || [])
+      setUsers(usersRes.users || [])
       
       // Load saved suggestions if they exist
       await loadSavedSuggestions()
@@ -298,7 +298,7 @@ export default function AssigneeMapping() {
                 setRefreshingUsers(true)
                 try {
                   const res = await refreshJiraUsers()
-                  setUsers(res.users || res || [])
+                  setUsers(res.users || [])
                   toast.success('Users refreshed from Jira!')
                 } catch (e) {
                   toast.error('Failed to refresh users')
