@@ -36,10 +36,11 @@ export default function AppHomePage() {
       setTimelineError(null)
       try {
         const res = await getDecompositionRaw(selectedRun.id)
-        setTimelineData(res)
+        const data = res.data
+        setTimelineData(data)
         
         // Update run's gantt step status to completed when timeline data is successfully loaded
-        if (res && res.epics && res.epics.length > 0 && selectedRun && selectedRun.steps.gantt.status !== 'completed') {
+        if (data && data.epics && data.epics.length > 0 && selectedRun && selectedRun.steps.gantt.status !== 'completed') {
           updateRun(selectedRun.id, {
             steps: {
               ...selectedRun.steps,

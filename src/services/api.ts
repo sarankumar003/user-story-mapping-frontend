@@ -1,4 +1,5 @@
 import axios from 'axios'
+import type { Decomposition } from '@/types/requirements'
 
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 //export const API_BASE_URL = 'http://localhost:8000'
@@ -104,7 +105,7 @@ export const getDecomposition = async (runId: string) => {
 
 export const getDecompositionRaw = async (runId: string) => {
   // GET /api/v1/requirements/decomposition_raw/{run_id}
-  return api.get(`/api/v1/requirements/decomposition_raw/${runId}`)
+  return api.get<Decomposition>(`/api/v1/requirements/decomposition_raw/${runId}`)
 }
 
 // Gantt API
