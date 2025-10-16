@@ -97,10 +97,11 @@ const SubtaskItem: React.FC<{ subtask: Subtask }> = ({ subtask }) => {
           )}
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
-          <Badge>{subtask.team}</Badge>
+          {/* team may not exist on Subtask per types; show only if present */}
+          { (subtask as any).team && <Badge>{(subtask as any).team}</Badge> }
           <Badge color="bg-gray-100 text-gray-700">{subtask.priority}</Badge>
-          {subtask.estimates?.hours != null && (
-            <Badge color="bg-amber-100 text-amber-700">{subtask.estimates.hours}h</Badge>
+          {subtask.estimated_hours != null && (
+            <Badge color="bg-amber-100 text-amber-700">{subtask.estimated_hours}h</Badge>
           )}
           <Badge color="bg-purple-100 text-purple-700">{subtask.status}</Badge>
         </div>
@@ -128,7 +129,7 @@ const StoryItem: React.FC<{
             )}
           </div>
           <div className="flex items-center gap-1 flex-shrink-0">
-            <Badge>{story.team}</Badge>
+            {story.team && <Badge>{story.team}</Badge>}
             <Badge color="bg-gray-100 text-gray-700">{story.priority}</Badge>
             {story.story_points != null && (
               <Badge color="bg-amber-100 text-amber-700">{story.story_points} SP</Badge>
@@ -141,7 +142,7 @@ const StoryItem: React.FC<{
         </div>
       </div>
       
-      {story.subtasks?.length > 0 && (
+      {(story.subtasks || []).length > 0 && (
         <div className="border-t border-gray-100">
           <div className="p-3">
             <div className="flex items-start gap-2">
@@ -152,11 +153,11 @@ const StoryItem: React.FC<{
               />
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-medium text-gray-500 mb-2">
-                  Subtasks ({story.subtasks.length})
+                  Subtasks ({(story.subtasks || []).length})
                 </div>
-                {isExpanded && (
+                    {isExpanded && (
                   <div className="space-y-2">
-                    {story.subtasks.map((subtask) => (
+                        {(story.subtasks || []).map((subtask) => (
                       <SubtaskItem key={subtask.id} subtask={subtask} />
                     ))}
                   </div>
@@ -189,9 +190,9 @@ const EpicItem: React.FC<{
             {epic.description && (
               <div className="mt-1 text-sm text-gray-700 whitespace-pre-wrap">{epic.description}</div>
             )}
-            {epic.labels?.length > 0 && (
+            {(epic.labels || []).length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1">
-                {epic.labels.map((label) => (
+                {(epic.labels || []).map((label) => (
                   <Badge key={label} color="bg-sky-50 text-sky-700">{label}</Badge>
                 ))}
               </div>
@@ -207,7 +208,7 @@ const EpicItem: React.FC<{
         </div>
       </div>
       
-      {epic.stories?.length > 0 && (
+      {(epic.stories || []).length > 0 && (
         <div className="border-t border-gray-100">
           <div className="p-4">
             <div className="flex items-start gap-2">
@@ -218,16 +219,16 @@ const EpicItem: React.FC<{
               />
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-gray-500 mb-3">
-                  Stories ({epic.stories.length})
+                  Stories ({(epic.stories || []).length})
                 </div>
                 {isExpanded && (
                   <div className="space-y-3">
-                    {epic.stories.map((story) => (
+                    {(epic.stories || []).map((story) => (
                       <StoryItem 
-                        key={story.id} 
+                        key={story.id || ''}
                         story={story} 
-                        isExpanded={expandedStories.has(story.id)} 
-                        onToggle={() => onToggleStory(story.id)} 
+                        isExpanded={expandedStories.has(story.id || '')} 
+                        onToggle={() => onToggleStory(story.id || '')} 
                       />
                     ))}
                   </div>
@@ -399,21 +400,27 @@ const DecompositionView: React.FC<{ data: Decomposition }> = ({ data }) => {
     <div className="space-y-4">
       <div className="flex items-center gap-2 text-sm text-gray-600">
         <SectionTitle>Overview</SectionTitle>
-        <Badge color="bg-gray-100 text-gray-700">Run: {data.run_id}</Badge>
-        <Badge color="bg-gray-100 text-gray-700">Generated: {new Date(data.generated_at).toLocaleString()}</Badge>
-        <Badge color="bg-gray-100 text-gray-700">Schema: {data.schema_version}</Badge>
+        {data.run_id && (
+          <Badge color="bg-gray-100 text-gray-700">Run: {data.run_id}</Badge>
+        )}
+        {data.generated_at && (
+          <Badge color="bg-gray-100 text-gray-700">Generated: {new Date(data.generated_at).toLocaleString()}</Badge>
+        )}
+        {data.schema_version && (
+          <Badge color="bg-gray-100 text-gray-700">Schema: {data.schema_version}</Badge>
+        )}
         {totalProjectHours > 0 && (
           <Badge color="bg-green-100 text-green-700">Total: {totalProjectHours}h</Badge>
         )}
       </div>
 
       <div className="space-y-4">
-        {data.epics.map((epic) => (
+        {(data.epics || []).map((epic) => (
           <EpicItem 
-            key={epic.id} 
+            key={epic.id || ''} 
             epic={epic} 
-            isExpanded={expandedEpics.has(epic.id)} 
-            onToggle={() => toggleEpic(epic.id)}
+            isExpanded={expandedEpics.has(epic.id || '')} 
+            onToggle={() => toggleEpic(epic.id || '')}
             expandedStories={expandedStories}
             onToggleStory={toggleStory}
           />

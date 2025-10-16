@@ -5,6 +5,7 @@ export interface Subtask {
   priority?: 'Low' | 'Medium' | 'High' | 'Critical'
   estimated_hours?: number
   status?: string
+  team?: string
 }
 
 export interface Story {
@@ -16,6 +17,8 @@ export interface Story {
   estimated_hours?: number
   status?: string
   subtasks?: Subtask[]
+  team?: string
+  story_points?: number
 }
 
 export interface Epic {
@@ -26,13 +29,19 @@ export interface Epic {
   estimated_hours?: number
   status?: string
   stories?: Story[]
+  labels?: string[]
 }
 
 export interface Decomposition {
   epics: Epic[]
   total_estimated_hours?: number
   timeline_weeks?: number
+  run_id?: string
+  generated_at?: string
+  schema_version?: string
+  warnings?: string[]
 }
+
 
 
 
