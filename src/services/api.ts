@@ -76,12 +76,15 @@ longRunningApi.interceptors.response.use(
 )
 
 // Document API
-export const uploadDocument = async (formData: FormData) => {
-  return longRunningApi.post('/api/v1/documents/upload', formData, {
+export type UploadResponse = { document_id: string; file_name: string }
+
+export const uploadDocument = async (formData: FormData): Promise<UploadResponse> => {
+  const data = await longRunningApi.post('/api/v1/documents/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   })
+  return data as unknown as UploadResponse
 }
 
 export const getRuns = async (limit: number = 20): Promise<any> => {
