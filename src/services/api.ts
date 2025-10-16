@@ -84,16 +84,32 @@ export const uploadDocument = async (formData: FormData) => {
   })
 }
 
-export const getRuns = async (limit: number = 20) => {
-  return api.get(`/api/v1/documents/runs?limit=${limit}`)
+export const getRuns = async (limit: number = 20): Promise<any> => {
+  const data = await api.get(`/api/v1/documents/runs?limit=${limit}`)
+  return data
 }
 
-export const getRun = async (runId: string) => {
-  return api.get(`/api/v1/documents/runs/${runId}`)
+export const getRun = async (runId: string): Promise<any> => {
+  const data = await api.get(`/api/v1/documents/runs/${runId}`)
+  return data
 }
 
-export const getDocumentSummary = async (runId: string) => {
-  return api.get(`/api/v1/documents/runs/${runId}/summary`)
+export type DocumentSummaryData = {
+  project_name: string
+  project_description: string
+  objectives: string[]
+  scope: string[]
+  stakeholders: string[]
+  key_features: string[]
+  technical_requirements: string[]
+  timeline_estimate: string
+  risks: string[]
+  assumptions: string[]
+}
+
+export const getDocumentSummary = async (runId: string): Promise<DocumentSummaryData> => {
+  const data = await api.get(`/api/v1/documents/runs/${runId}/summary`)
+  return data as unknown as DocumentSummaryData
 }
 
 // Requirements API (read-only + generation)
@@ -102,9 +118,10 @@ export const triggerDecomposition = async (runId: string) => {
   return longRunningApi.post(`/api/v1/requirements/decompose/${runId}`)
 }
 
-export const getDecomposition = async (runId: string) => {
+export const getDecomposition = async (runId: string): Promise<Decomposition> => {
   // GET /api/v1/requirements/decomposition/{run_id}
-  return api.get(`/api/v1/requirements/decomposition/${runId}`)
+  const data = await api.get(`/api/v1/requirements/decomposition/${runId}`)
+  return data as unknown as Decomposition
 }
 
 export const getDecompositionRaw = async (runId: string): Promise<Decomposition> => {
@@ -119,14 +136,16 @@ export const generateGanttChart = async (
   startDate?: string, 
   teamSize: number = 5
 ) => {
-  return api.post(`/api/v1/gantt/generate/${runId}`, {
+  const data = await api.post(`/api/v1/gantt/generate/${runId}`, {
     start_date: startDate,
     team_size: teamSize,
   })
+  return data as unknown as any
 }
 
-export const getGanttChart = async (runId: string) => {
-  return api.get(`/api/v1/gantt/chart/${runId}`)
+export const getGanttChart = async (runId: string): Promise<any> => {
+  const data = await api.get(`/api/v1/gantt/chart/${runId}`)
+  return data
 }
 
 // Jira Users Cache API
@@ -158,18 +177,21 @@ export const getAssigneeSuggestions = async (runId: string): Promise<Suggestions
   return data as unknown as SuggestionsResponse
 }
 
-export const getFinalAssignments = async (runId: string) => {
-  return api.get(`/api/v1/assignments/final/${runId}`)
+export const getFinalAssignments = async (runId: string): Promise<any> => {
+  const data = await api.get(`/api/v1/assignments/final/${runId}`)
+  return data
 }
 
-export const syncToJira = async (runId: string, assignments: any) => {
-  return longRunningApi.post(`/api/v1/jira-sync/sync/${runId}`, {
+export const syncToJira = async (runId: string, assignments: any): Promise<any> => {
+  const data = await longRunningApi.post(`/api/v1/jira-sync/sync/${runId}`, {
     assignments
   })
+  return data
 }
 
-export const getJiraSyncResult = async (runId: string) => {
-  return api.get(`/api/v1/jira-sync/sync/${runId}`)
+export const getJiraSyncResult = async (runId: string): Promise<any> => {
+  const data = await api.get(`/api/v1/jira-sync/sync/${runId}`)
+  return data
 }
 
 export default api

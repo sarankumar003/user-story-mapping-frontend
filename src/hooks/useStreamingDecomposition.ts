@@ -138,7 +138,7 @@ export const useStreamingDecomposition = () => {
           // Show warnings if any
           if (result.warnings && result.warnings.length > 0) {
             result.warnings.forEach((warning: string) => {
-              toast.warning(warning, { duration: 5000 })
+              toast(warning, { duration: 5000 })
             })
           }
 
@@ -214,7 +214,7 @@ export const useStreamingDecomposition = () => {
       // Show warnings if any
       if (result.warnings && result.warnings.length > 0) {
         result.warnings.forEach((warning: string) => {
-          toast.warning(warning, { duration: 5000 })
+          toast(warning, { duration: 5000 })
         })
       }
 
@@ -247,7 +247,7 @@ export const useStreamingDecomposition = () => {
 
       if (validation.warnings && validation.warnings.length > 0) {
         validation.warnings.forEach((warning: string) => {
-          toast.warning(warning, { duration: 5000 })
+          toast(warning, { duration: 5000 })
         })
       }
 
