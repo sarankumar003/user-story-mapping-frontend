@@ -73,14 +73,14 @@ const TreeItem: React.FC<{
 
 // Calculate estimated hours for a story (sum of all subtask hours)
 const calculateStoryHours = (story: Story): number => {
-  return story.subtasks.reduce((total, subtask) => {
-    return total + (subtask.estimates?.hours || 0)
+  return (story.subtasks || []).reduce((total, subtask) => {
+    return total + (subtask.estimated_hours || 0)
   }, 0)
 }
 
 // Calculate estimated hours for an epic (sum of all story hours)
 const calculateEpicHours = (epic: Epic): number => {
-  return epic.stories.reduce((total, story) => {
+  return (epic.stories || []).reduce((total, story) => {
     return total + calculateStoryHours(story)
   }, 0)
 }
